@@ -1,6 +1,6 @@
 #!/usr/bin/env /usr/bin/python 
 # -*- coding: utf-8 -*-
-# @author djangowang@tencent.com
+# @author djangowang@tencent.com  
 # @from http://blog.puppeter.com/read.php?7
 
 import sys
