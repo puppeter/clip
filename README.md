@@ -3,6 +3,7 @@ clip 自动化运维工具C/S架构具体使用见（http://blog.puppeter.com/re
 
 # client
 clip端由python开发，以下为代码结构
+<pre>
 .
 |-- clip                       #命令工具
 |-- conf
@@ -35,5 +36,5 @@ clip端由python开发，以下为代码结构
     |-- plugin_scp.py
     |-- plugin_ssh.py
     `-- plugin_tree.py
-    
+    </pre>
     # server端为php开发,使用（http://www.doitphp.com/）框架
