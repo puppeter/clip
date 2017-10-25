@@ -39,4 +39,3 @@ clip端由python开发，以下为代码结构
     </pre>
 
 
-[![ScreenShot](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](http://youtu.be/vt5fpE0bzSY)
