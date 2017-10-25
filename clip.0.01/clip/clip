@@ -1,0 +1,92 @@
+#!/usr/bin/env /usr/bin/python 
+# -*- coding: utf-8 -*-
+# @author djangowang@tencent.com  
+# @from http://blog.puppeter.com/read.php?7
+
+import sys
+import signal
+import os
+import optparse
+import ConfigParser
+from lib.subcommand import Subcommand
+from lib.subcommand import SubcommandsOptionParser
+import warnings
+warnings.filterwarnings("ignore")
+
+def init_config(config_name):
+    conf = ConfigParser.ConfigParser()
+    conf.read(config_name)
+    conf.sections()
+    return conf
+
+def get_option(conf, section, option):
+    ret = ''
+    try:
+        ret = conf.get(section, option)
+    except Exception:
+        ret = ''
+    return ret
+
+def register_subcommands(subcommands,root_pwd):
+    cmds = []
+    for subcommand in subcommands:
+        sub_conf = init_config(root_pwd + "/conf/" + subcommand + ".ini")
+        #get options
+        options = get_option(sub_conf, "base", "options").split("|")
+        
+        #get usage
+        usage = get_option(sub_conf, "base", "usage")
+
+        #get explanation
+        explanation = get_option(sub_conf, "base", "explanation")
+
+        #get example
+        example = get_option(sub_conf, "base", "example")
+
+        usage = usage + "\n" + explanation
+        
+        parser = optparse.OptionParser(usage=usage)
+        for option in options:
+            full_name = get_option(sub_conf, option, "full_name")
+            is_bool = get_option(sub_conf, option, "is_bool")
+            if (is_bool is None) or (is_bool == "false"):
+                parser.add_option("-" + option, full_name, dest = option)
+            else:
+                parser.add_option("-" + option, full_name, dest = option, default = False, action = "store_true")
+
+        cmds.append(Subcommand(subcommand, parser, subcommand + ' command', example=example))
+
+    return cmds
+
+def sigint_handler(signum,frame):     
+    print "clip exit !\n"  
+    sys.exit()     
+
+if __name__ == '__main__':
+
+    ROOT_PWD = os.path.dirname(__file__) 
+
+    signal.signal(signal.SIGINT,sigint_handler)  
+    conf = init_config(ROOT_PWD+"/conf/framework.ini")
+
+    #register subcommands.
+    subcommand_names = conf.get("base", "subcommands").split("|")
+    subcommands = register_subcommands(subcommand_names,ROOT_PWD)
+
+    # Set up the global parser and its options.
+    parser = SubcommandsOptionParser(
+            subcommands = tuple(subcommands))
+    
+    # Parse the global options and the subcommand options.
+    options, subcommand, suboptions, subargs = parser.parse_args()
+    
+    #import策略的plugin
+    import_cmd = "from plugin.plugin_" + subcommand.name + " import plugin_" + subcommand.name
+    exec import_cmd
+    
+    plugin_name = eval("plugin_" + subcommand.name)
+    plugin = plugin_name()
+    plugin.set_root_path(ROOT_PWD)
+    plugin.set_subcommand(subcommand)
+
+    cmd_output = plugin.process(suboptions.__dict__, subargs)

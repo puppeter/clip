@@ -1,0 +1,4 @@
+[2015-01-05 19:34:16] error: line:39 | res:parameter error | operator: IP: 14.17.22.36
+[2015-01-05 19:34:50] error: line:39 | res:parameter error | operator:guest IP: 14.17.22.36
+[2015-01-05 19:46:19] Error: The config file:clip.ini.class is not exists! IP: 14.17.22.36
+[2015-01-05 20:01:19] error: line:105| res:premission deny| operator:guest IP: 14.17.22.36
