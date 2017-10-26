@@ -76,7 +76,10 @@ class plugin_scp(plugin_base):
             print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
 
         if password == 'null':
-            cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+            if os.path.isdir(filename) == True:
+                cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+            else:
+                cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
         else:
             shpath = self.root_path+'/lib/tiny_expect_scp.exp'
             cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path + '"'
