@@ -125,7 +125,7 @@ class plugin_base:
                 print "filename not exists !"
                 sys.exit(1)
 
-            match=re.search(r'\@',filename)
+            match=re.search(r'\@',args[1])
             if match == None:
                 self.print_help()
                 sys.exit(1) 

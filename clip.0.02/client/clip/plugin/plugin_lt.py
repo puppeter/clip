@@ -41,16 +41,16 @@ class plugin_lt(plugin_base):
 
             ip_arr=[] 
             if (options['a'] != None):
-                ip_arr=options['a'].split(",")
-                if(len(ip_arr) >=2): 
+                arr=options['a'].split(",")
+                if(len(arr) >=2): 
                     for i in ip_arr:
                         if(len(i.split("."))== 4):
-                            ip_arr.append(str(i))
+                            arr.append(str(i))
                 else:
                     ip_arr.append(ipr['0'])
             
 
-            f=open(filename,"r")
+            f=open(ip_file,"r")
             for ip in f:
                 ipaddress=str(ip.strip())
                 if (options['r'] != None) and (ipaddress in options['r']):
@@ -140,10 +140,10 @@ class plugin_lt(plugin_base):
             print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
 
         if password == 'null':
+            cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+        else:
             shpath = self.root_path+'/lib/tiny_expect_scp.exp'
             cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path + '"'
-        else:
-            cmd = 'scp ' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port+':' + path + '"'
 
         if (options['d'] == True):
             print cmd
