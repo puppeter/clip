@@ -48,7 +48,6 @@ class plugin_ssh(plugin_base):
             else:
                     ip_arr=ret
             
-
             if options['w'] ==True:
                 self.check_worker_count(ip_arr)
                 import threading
@@ -65,6 +64,7 @@ class plugin_ssh(plugin_base):
             self.ssh_cmd(ip,password,command,user,port,options)
 
 
+
         # disalbe ssh log
         if options['o'] == True:
             sys.exit(0) 
@@ -74,7 +74,7 @@ class plugin_ssh(plugin_base):
         sys.exit(0)
 
     def ssh_cmd(self, host,password,command, user,port,options):
-        if options['w'] != True:
+        if options['w'] != True and options['j'] !=True:
             print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
 
         if password== 'null':
@@ -89,4 +89,3 @@ class plugin_ssh(plugin_base):
             sys.exit(0)
 
         os.system(cmd)
-    
