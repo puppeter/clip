@@ -37,6 +37,7 @@ class plugin_scp(plugin_base):
 
             
             ip_arr=[]
+            output=[]
             if(options['l'] != None):
                 ret=self.output_limit(ret,options['l'])
 
@@ -61,6 +62,7 @@ class plugin_scp(plugin_base):
         else:
             self.scp_cmd(filename,password,username,options['q'],path,port,options)
         
+
         # disalbe ssh log
         if options['o'] == True:
             sys.exit(0) 
@@ -68,6 +70,7 @@ class plugin_scp(plugin_base):
         # for history 
         log_command=self.build_log(sys.argv)
         self.history_upload(log_command) 
+        
         sys.exit(0)
 
 
@@ -76,15 +79,21 @@ class plugin_scp(plugin_base):
             print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
 
         if password == 'null':
-            if os.path.isdir(filename) == True:
-                cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+            if options['R'] ==True:
+            #rsync -partial -z --progress --bwlimit=1000 --rsh=ssh ./ip root@100.104.194.86:/tmp/
+                cmd='rsync -partial -z --progress --bwlimit=1000 --rsh=ssh '+filename+' '+username+'@'+host+'#'+port+':'+path
+
             else:
-                cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+                if os.path.isdir(filename) == True:
+                    cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+                else:
+                    cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
         else:
             shpath = self.root_path+'/lib/tiny_expect_scp.exp'
             cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path + '"'
-        if (options['d'] == True):
+        if options['d'] == True:
             print cmd
             sys.exit(0)
+
         os.system(cmd)
-    
+
