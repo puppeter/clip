@@ -80,7 +80,6 @@ class plugin_scp(plugin_base):
 
         if password == 'null':
             if options['R'] ==True:
-            #rsync -partial -z --progress --bwlimit=1000 --rsh=ssh ./ip root@100.104.194.86:/tmp/
                 cmd='rsync -partial -z --progress --bwlimit=1000 --rsh=ssh '+filename+' '+username+'@'+host+'#'+port+':'+path
 
             else:
