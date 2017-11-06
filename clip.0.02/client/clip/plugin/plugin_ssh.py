@@ -48,6 +48,7 @@ class plugin_ssh(plugin_base):
             else:
                     ip_arr=ret
             
+            output=[]
             if options['w'] ==True:
                 self.check_worker_count(ip_arr)
                 import threading
@@ -57,13 +58,20 @@ class plugin_ssh(plugin_base):
 
             else:
                 for ip in ip_arr:
-                    self.ssh_cmd(ip,password,command,user,port,options)
+                    if options['j'] == True:
+                        output.append(ip)
+                        output.append(self.ssh_cmd(ip,password,command,user,port,options))
+                    else:
+                        self.ssh_cmd(ip,password,command,user,port,options)
 
         else: 
             ip=tmp_array[1]
             self.ssh_cmd(ip,password,command,user,port,options)
 
 
+        if options['j'] == True:
+            import json
+            print json.dumps(output)
 
         # disalbe ssh log
         if options['o'] == True:
@@ -78,7 +86,7 @@ class plugin_ssh(plugin_base):
             print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
 
         if password== 'null':
-            cmd = 'ssh -p '+port+" "+host + ' ' + command  
+            cmd = 'ssh -n -q  -p '+port+" "+host + ' ' + '\''+command+'\'' 
         else:
             shPath = self.root_path+'/lib/tiny_expect.exp'
             command=command.replace('ipaddress',host)
@@ -88,4 +96,9 @@ class plugin_ssh(plugin_base):
             print cmd
             sys.exit(0)
 
-        os.system(cmd)
+        
+        if options['j'] != True:
+            os.system(cmd)
+        else:
+            output=os.popen(cmd).readlines()
+            return output 
