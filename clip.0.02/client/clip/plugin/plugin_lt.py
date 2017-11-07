@@ -56,10 +56,9 @@ class plugin_lt(plugin_base):
                 if (options['r'] != None) and (ipaddress in options['r']):
                     continue
                 else:
-                    ip_arr.append(ipaddress)
-                    #self.scp_cmd(filename,password,username,ipaddress,path,port,options)
+                    self.scp_cmd(filename,password,username,ipaddress,path,port,options)
             f.close()
-
+            
             if options['w'] == True:
                 import threading
                 for ip in ip_arr:
@@ -67,7 +66,8 @@ class plugin_lt(plugin_base):
                     t.start()
             else:
                 for ip in ip_arr:
-                    self.scp_cmd(filename,password,username,ip,path,port,options)
+                    self.scp_cmd(filename,password,username,ipaddress,path,port,options)
+            
 
         else: 
 
@@ -90,10 +90,8 @@ class plugin_lt(plugin_base):
                     for i in ip_arr:
                         if(len(i.split("."))== 4):
                             ip_arr.append(str(i))
-                            #self.ssh_cmd(str(i),password,command,user,port,options)
                 else:
                     ip_arr.append(str(ip_arr[0]))
-                    #self.ssh_cmd(str(ip_arr[0]),password,command,user,port,options)
                     
                 
             f=open(ip_file,"r")
@@ -102,10 +100,10 @@ class plugin_lt(plugin_base):
                 if (options['r'] != None) and (ipaddress in options['r']):
                     continue
                 else:
-                    #self.ssh_cmd(ipaddress,password,command,user,port,options)
                     ip_arr.append(ipaddress)
             f.close()
-
+            
+            output=[]
             if options['w'] == True:
                 import threading
                 for ip in ip_arr:
@@ -113,42 +111,14 @@ class plugin_lt(plugin_base):
                     t.start()
             else:
                 for ip in ip_arr:
-                    self.ssh_cmd(ip,password,command,user,port,options)
+                    if options['j'] == True:
+                        output.append(ip)
+                        output.append(self.ssh_cmd(ip,password,command,user,port,options))
+                    else:
+                        self.ssh_cmd(ip,password,command,user,port,options)
 
+            if options['j'] == True:
+                import json             
+                print json.dumps(output)
 
         sys.exit(0)
-        
-
-    def ssh_cmd(self, host,password,command, user,port,options):
-        if options['w'] != True:
-            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
-
-        if password == 'null':
-            cmd = 'ssh -p '+port+" "+host + ' ' + command  
-        else:
-            shPath = self.root_path+'/lib/tiny_expect.exp'
-            cmd = shPath + ' ' + '"' + command + '"' + ' ' + port + ' ' + password+ ' ' + user + '@' + host 
-
-        if (options['d'] == True):
-            print cmd
-            sys.exit(0)
-        os.system(cmd)
-
-    
-    def scp_cmd(self, filename, password, username, host, path,port,options):
-        if options['w'] != True:
-            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
-
-        if password == 'null':
-            if os.path.isdir(filename) == True:
-                cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
-            else:
-                cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
-        else:
-            shpath = self.root_path+'/lib/tiny_expect_scp.exp'
-            cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path + '"'
-
-        if (options['d'] == True):
-            print cmd
-            sys.exit(0)
-        os.system(cmd)

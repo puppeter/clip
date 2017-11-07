@@ -73,26 +73,3 @@ class plugin_scp(plugin_base):
         
         sys.exit(0)
 
-
-    def scp_cmd(self, filename, password, username, host, path,port,options):
-        if options['w'] != True:
-            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
-
-        if password == 'null':
-            if options['R'] ==True:
-                cmd='rsync -partial -z --progress --bwlimit=1000 --rsh=ssh '+filename+' '+username+'@'+host+'#'+port+':'+path
-
-            else:
-                if os.path.isdir(filename) == True:
-                    cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
-                else:
-                    cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
-        else:
-            shpath = self.root_path+'/lib/tiny_expect_scp.exp'
-            cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path + '"'
-        if options['d'] == True:
-            print cmd
-            sys.exit(0)
-
-        os.system(cmd)
-

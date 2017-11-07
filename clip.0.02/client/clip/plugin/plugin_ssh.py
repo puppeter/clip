@@ -80,25 +80,3 @@ class plugin_ssh(plugin_base):
         log_command=self.build_log(sys.argv)
         self.history_upload(log_command) 
         sys.exit(0)
-
-    def ssh_cmd(self, host,password,command, user,port,options):
-        if options['w'] != True and options['j'] !=True:
-            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
-
-        if password== 'null':
-            cmd = 'ssh -n -q  -p '+port+" "+host + ' ' + '\''+command+'\'' 
-        else:
-            shPath = self.root_path+'/lib/tiny_expect.exp'
-            command=command.replace('ipaddress',host)
-            cmd = shPath + ' ' + '"' + command + '"' + ' ' + port + ' ' + password+ ' ' + user + '@' + host 
-
-        if (options['d'] == True):
-            print cmd
-            sys.exit(0)
-
-        
-        if options['j'] != True:
-            os.system(cmd)
-        else:
-            output=os.popen(cmd).readlines()
-            return output 
