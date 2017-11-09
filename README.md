@@ -38,4 +38,3 @@ clip端由python开发，以下为代码结构
     `-- plugin_version.py
     </pre>
 
-
