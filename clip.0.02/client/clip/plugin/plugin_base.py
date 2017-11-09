@@ -121,9 +121,10 @@ class plugin_base:
                 self.print_help()
                 sys.exit(1) 
             fileName = args[0]
-            if os.path.exists(fileName) != True:
-                print "filename not exists !"
-                sys.exit(1)
+            if options['D'] != True:
+                if os.path.exists(fileName) != True:
+                    print "filename not exists !"
+                    sys.exit(1)
 
             match=re.search(r'\@',args[1])
             if match == None:
@@ -294,3 +295,56 @@ class plugin_base:
 
     def set_operator(self, operator):
         self.operator = operator
+    
+    def ssh_cmd(self, host,password,command, user,port,options):
+        if options['w'] != True and options['j'] != True and options['d'] != True:
+            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
+
+        if password == 'null':
+            cmd = 'ssh -n -q  -p '+port+" "+host + ' \'' + command+'\'' 
+        else:
+            shPath = self.root_path+'/lib/tiny_expect.exp'
+            command=command.replace('ipaddress',host)
+            cmd = shPath + ' ' + '"' + command + '"' + ' ' + port + ' ' + password+ ' ' + user + '@' + host 
+
+        if (options['d'] == True):
+            print cmd
+            sys.exit(0)
+    
+        if options['j'] != True:
+            os.system(cmd)
+        else:
+            output=os.popen(cmd).readlines()
+            return output 
+
+
+    def scp_cmd(self, filename, password, username, host, path,port,options):
+        if options['w'] != True and options['d'] != True:
+            print "\033[0;36;40m\033[0;32;40m =============== \033[0;33;40m"+host+" \033[0;32;40m===============\033[0m\n"
+
+        if password == 'null':
+            if options['D'] == True: 
+                if options['R'] ==True:
+                    cmd='rsync -partial -z --progress --bwlimit=1000 --rsh=ssh '+username+'@'+host+'#'+port+':'+path+' '+filename+'.'+host
+                else:
+                    cmd ='scp ' + username + '@' + host +"#"+port +':' + path+ ' '+filename+"."+host 
+            else:
+                if options['R'] ==True:
+                    cmd='rsync -partial -z --progress --bwlimit=1000 --rsh=ssh '+filename+' '+username+'@'+host+'#'+port+':'+path
+
+                else:
+                    if os.path.isdir(filename) == True:
+                        cmd ='scp -r ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+                    else:
+                        cmd ='scp ' + filename + ' ' + username + '@' + host +"#"+port +':' + path 
+        else:
+            shpath = self.root_path+'/lib/tiny_expect_scp.exp'
+            if options['D'] == True:
+                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + username + '@' + host +"#"+port +':' + path + ' '+filename+'"'
+            else:
+                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path +"."+host+ '"'
+
+        if options['d'] == True:
+            print cmd
+            sys.exit(0)
+        os.system(cmd)
