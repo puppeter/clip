@@ -13,13 +13,13 @@ Options:
 
 Commands:
   scan      scan command                     # 扫描机器列表
-  cstring   cstring command                  # ip 与 string关系转换
+  cstring   cstring command                  # IP 与 String关系转换
   ssh       ssh command                      # 远程执行系统命令
   scp       scp command                      # 拷贝本地文件到远程 && 拷贝远程文件到本地
   tree      tree command                     # 树形结构显示名字服务列表
   history   history command                  # 查询历史执行的命令
-  import    import command                   # 导入ip与名字服务对应关系
-  lt        lt command                       # 本地ip列表执行远程命令 && 考本文件到远程
+  import    import command                   # 导入IP与名字服务对应关系
+  lt        lt command                       # 本地IP列表执行远程命令 && 考本文件到远程
   version   version command                  # 显示版本信息
   help (?)  give detailed help on a specific sub-command
   </pre>
