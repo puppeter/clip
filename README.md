@@ -24,12 +24,12 @@ Commands:
   help (?)  give detailed help on a specific sub-command
   </pre>
 
-# Client结构
+# Client代码结构
 clip端由python开发，以下为代码结构
 <pre>
 .
-|-- clip    #执行文件
-|-- conf
+|-- clip                   # 执行文件
+|-- conf                   # 配置文件
 |   |-- clip.ini  
 |   |-- cstring.ini
 |   |-- framework.ini
@@ -42,13 +42,13 @@ clip端由python开发，以下为代码结构
 |   |-- ssh.ini
 |   |-- tree.ini
 |   `-- version.ini
-|-- lib
-|   |-- __init__.py
+|-- lib                    # 库文件
+|   |-- __init__.py
 |   |-- subcommand.py
 |   |-- tiny_expect.exp
 |   `-- tiny_expect_scp.exp
-`-- plugin
-    |-- __init__.py
+`-- plugin                 # 插件目录
+    |-- __init__.py
     |-- plugin_base.py
     |-- plugin_cstring.py
     |-- plugin_history.py
