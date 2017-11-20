@@ -262,6 +262,7 @@ class plugin_base:
             
     def format_output(self,ret):
         return "\n".join(ret.split("|")[:-1])
+
         
     def curl_get_contents(self, url, post_param = None, host = None):
         response = None
@@ -281,7 +282,8 @@ class plugin_base:
             response = conn.getresponse().read()
             conn.close()
         except Exception, e:
-            sys.stderr.write(str(e))
+            sys.stderr.write(str(e)+",Please Check Server API\n")
+            sys.exit(1)
         return response
 
     def set_root_path(self, root_path):
