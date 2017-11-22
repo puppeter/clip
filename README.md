@@ -4,7 +4,7 @@ Clip是一款名字服务工具（C/S架构）思路与DNS近似，通过String�
 # 安装文档
  http://blog.puppeter.com/read.php?7
 
-# sdk 介绍
+# Client端 SDK 介绍
 <pre>
 # clip 
 Usage: 
@@ -27,7 +27,6 @@ Commands:
   help (?)  give detailed help on a specific sub-command
   </pre>
 
-# Client代码结构
 clip端由python开发，以下为代码结构
 <pre>
 .
