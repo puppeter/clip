@@ -6,3 +6,5 @@
 5. clip scp && clip lt 支持反向下载服务器文件；
 6. 修复程序bug && 优化功能；
 7. clip version 增加版本功能。
+
+# 安装文档见 http://blog.puppeter.com/read.php?7
