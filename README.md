@@ -27,6 +27,42 @@ Commands:
   help (?)  give detailed help on a specific sub-command
   </pre>
 
+每个子命令会有相应的帮助信息
+<pre>
+clip cstring 
+Usage: clip cstring [OPTIONS] param...
+
+Cstring(Clip String)Convert IP to String or String to IP
+
+Options:
+  -h, --help            show this help message and exit
+  -q Q, --query_string=Q
+  -d, --dryrun          
+  -i I, --ip=I          
+  -c, --count           
+  -l L, --limit=L       
+  -o, --log_disable     
+  -r R, --remove_ip=R   
+  -a A, --append=A      
+  -j J, --join=J        
+
+
+-----------EXAMPLE--------
+
+#### Action ####
+# clip cstring --query_string (-q) *-test-pc-*
+# clip cstring --ip (-i) 10.149.19.84
+# cliy cstring --query_string (-q) *-test-pc-*,*-docker-*-*
+# clip cstring --query_string (-q) sz-qzone-qzoneini-access5 --limit (-l) 10,15
+# clip cstring --query_string *-test-*-* --append (-a) 192.168.0.1,192.168.0.2
+# clip cstring --query_string (-q) *-test-*-* --remove_ip (-r) 192.168.0.1,192.168.0.6
+# clip cstring --query_string *-test-*-* --join (-j)  "("|" "," "\n" "space" "json")"
+#### Switch ###
+# clip cstring --query_string (-q) *-test-pc-* --dryrun (-d)
+# clip cstring --query_string (-q) *-test-pc-* --count (-c)
+# clip cstring --query_string (-q) sz-qzone-qzoneini-access5 --log_disable (-o)
+
+</pre>
 clip端由python开发，以下为代码结构
 <pre>
 .
