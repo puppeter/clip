@@ -64,7 +64,7 @@ clip端由python开发，以下为代码结构
     </pre>
 
 # Server端 API 介绍
-##1.接口功能：测试 （test）
+## 1.接口功能：测试 （test）
 <pre>
 接口名：test
 返回： ping ok
