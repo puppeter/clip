@@ -128,7 +128,7 @@ curl 用例
 curl "IP/index.php/Clip/api_get_tree?cstring=*-csg-*-*&operator=guest&signature=8f6857d4cc9681f4d17a242b44d23c72"
 </pre>
 
-## 3.接口功能：获取ip对应名字服务关系(/index.php/Clip/api_version1)
+## 3.接口功能：获取IP对应名字服务关系(/index.php/Clip/api_version1)
 <pre>
 参数        含义                           类型       是否必传   参数内容
 parameter   参数类型                       string        Y        "getip","getcstring","mgetip","mgetcstring"
