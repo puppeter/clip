@@ -63,3 +63,46 @@ clip端由python开发，以下为代码结构
     `-- plugin_version.py
     </pre>
 
+# Server端 API 介绍
+
+接口功能：测试 （test）
+接口名：test
+返回： ping ok
+curl IP/index.php/Clip/test
+
+
+接口功能：显示树形结构 （/index.php/Clip/api_get_tree）
+参数        含义                           类型       是否必传   参数内容
+cstring     获取指定名字服务的树形结构     string        Y            
+operator    操作权限                       string        Y        default|guest|admin
+signature   url签名                        string        Y        php案例：md5($input['cstring']."-".$key."-".date('H')) 
+
+返回：
+参数   含义
+ret    0正常，非0失败    
+data   返回内容
+
+
+curl 用例
+curl IP/index.php/Clip/api_get_tree?cstring=*-csg-*-*&operator=guest&signature=8f6857d4cc9681f4d17a242b44d23c72
+
+
+/index.php/Clip/api_version1
+接口功能：获取ip对应名字服务关系
+参数        含义                           类型       是否必传   参数内容
+parameter   参数类型                       string        Y        "getip","getcstring","mgetip","mgetcstring"
+cstring     获取指定名字服务的树形结构     string        Y            
+operator    操作权限                       string        Y        default|guest|admin
+signature   url签名                        string        Y        php案例：md5($input['cstring']."-".$key."-".date('H')) 
+format      返回格式                       string        N        text(默认)|json
+
+
+返回：
+参数   含义
+ret    0正常，非0失败    
+data   返回内容
+
+curl 用例
+curl IP/index.php/Clip/api_version1?parameter=getcstring&cstring=*-cls-*-*&operator=guest&signature=06588845bdad76e1a143831e9a970661
+
+
