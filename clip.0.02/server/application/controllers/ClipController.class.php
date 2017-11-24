@@ -24,8 +24,8 @@ const Guest_Key='b5a6992e705d141f216015902fd58f1e';
 const Admin_Key='e0d25aa45a6e8fc68f3c075f1495c234';
 const Default_Key='e0d25aa45a6e8fc68f3c075f1495c234';
 
-public function indexAction() {
-	echo "test ok";
+public function testAction() {
+	echo "ping ok";
 
 }
 
@@ -184,10 +184,8 @@ public function api_version1Action() {
     $input['ip'] =$this->get('ip');
     $input['cstring'] =$this->get('cstring');
     $input['operator'] =$this->get('operator');
-    $input['group'] =$this->get('group');
     $input['format'] =$this->get('format');
     $input['signature'] =$this->get('signature');
-    $input['cacheswitch'] =$this->get('cacheswitch');
 
     
     $parameter_allow_array=array("getip","getcstring","mgetip","mgetcstring");	
@@ -391,6 +389,111 @@ public function clip_registerAction() {
         $tmp['v']=$input['v'];
         $tmp['operator']=$input['operator'];
         $output['data']=implode("|",$tmp)."| succ";
+        echo json_encode($output);
+    }else{
+        $output['ret']="1";
+        $output['data']="db error";
+        echo json_encode($output);
+    }
+}
+
+public function clip_deleterAction() {
+    $input=array();
+    $input['idc'] =$this->get('idc');
+    $input['product'] =$this->get('product');
+    $input['modules'] =$this->get('modules');
+    $input['group'] =$this->get('group');
+    $input['port'] =$this->get('port');
+    $input['k'] =$this->get('k');
+    $input['v'] =$this->get('v');
+    $input['owner'] =$this->get('owner');
+    $input['operator'] =$this->get('operator');
+    $input['signature'] =$this->get('signature');
+    
+    if($input['operator'] == "guest"){
+        $key=self::Guest_Key;
+    }elseif($input['operator'] == "admin"){
+        $key=self::Admin_Key;
+    }else{
+        $key=self::Default_Key;
+    }
+	
+
+    $url="idc=".$input['idc']."&product=".$input['product']."&modules=".$input['modules']."&group=".$input['group']
+    ."&port=".$input['port']."&v=".$input['v']."&owner=".$input['owner'];
+	$signature=md5($url."-".$key."-".date('H'));
+	if(empty($input['signature'])|| $input['signature'] != $signature){
+	    Log::write("line:".__LINE__."| res:premission deny| operator:".$input['operator'],error);
+	    $output['ret']="1";
+	    $output['data']="line:".__LINE__."\tres:permission error";
+	    die(json_encode($output));
+	}
+
+    $model=$this->model('Clip');
+    $res=$model->Insert_clip($input);
+    if($res){
+        $output['ret']="0";
+        $tmp['cstring']=$input['idc']."-".$input['product']."-".$input['modules']."-".$input['group']."-".$input['port'];
+        $tmp['v']=$input['v'];
+        $tmp['operator']=$input['operator'];
+        $output['data']=implode("|",$tmp)."| succ";
+        echo json_encode($output);
+    }else{
+        $output['ret']="1";
+        $output['data']="db error";
+        echo json_encode($output);
+    }
+}
+
+public function clip_updateFlagAction() {
+    $input=array();
+    $input['ip'] =$this->get('ip');
+    $input['flag'] =$this->get('flag');
+    $input['signature'] =$this->get('signature');
+    
+    if(empty($input['ip'])){
+        Log::write("line:".__LINE__." | res:ip empty| operator:".$input['operator'],error);
+        $output['ret']="1";
+        $output['data']="line:".__LINE__."\tres:ip emtpy";
+        die(json_encode($output));
+    } 
+    
+    if(empty($input['flag'])){
+        Log::write("line:".__LINE__." | res:flag empty| operator:".$input['operator'],error);
+        $output['ret']="1";
+        $output['data']="line:".__LINE__."\tres:flag emtpy";
+        die(json_encode($output));
+    } 
+    
+    if(!is_numeric($input['flag'])){
+        Log::write("line:".__LINE__." | res:flag must be numeric| operator:".$input['operator'],error);
+        $output['ret']="1";
+        $output['data']="line:".__LINE__."\tres:flag must be numeric";
+        die(json_encode($output));
+    } 
+
+    if($input['operator'] == "guest"){
+        $key=self::Guest_Key;
+    }elseif($input['operator'] == "admin"){
+        $key=self::Admin_Key;
+    }else{
+        $key=self::Default_Key;
+    }
+
+    $url="ip=".$input['ip']."flag=".$input['flag'];
+	$signature=md5($url."-".$key."-".date('H'));
+	if(empty($input['signature'])|| $input['signature'] != $signature){
+	    Log::write("line:".__LINE__."| res:premission deny| operator:".$input['operator'],error);
+	    $output['ret']="1";
+	    $output['data']="line:".__LINE__."\tres:permission error";
+	    die(json_encode($output));
+	}
+
+    $model=$this->model('Clip');
+    $res=$model->Update_clip($input);
+    if($res){
+        $output['ret']="0";
+        $output['data']='update succ';
         echo json_encode($output);
     }else{
         $output['ret']="1";
