@@ -342,9 +342,9 @@ class plugin_base:
         else:
             shpath = self.root_path+'/lib/tiny_expect_scp.exp'
             if options['D'] == True:
-                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + username + '@' + host +"#"+port +':' + path + ' '+filename+'"'
+                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path +'"'
             else:
-                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path +"."+host+ '"'
+                cmd = shpath + ' ' + '"' + password + '"' + ' ' + '"' + filename + ' ' + username + '@' + host +"#"+port +':' + path +'"'
 
         if options['d'] == True:
             print cmd
