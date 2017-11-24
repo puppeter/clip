@@ -1,6 +1,11 @@
 # Clip 介绍
 Clip是一款名字服务工具（C/S架构）思路与DNS近似，通过String方式来管理机器资源,其中IP与String的关系保存在Sever端，Client端通过SDK可以批量执行命令、批量发布文件、扫描业务存活端口和遍历String树形关系功能等。Clip在海量运维场景下可以提升我们的工作效率，譬如目前还可以经常看到程序写死IP的情况当IP故障需要重新发布程序配置解决，这时可以通过Clip String方式替代写死IP的情况，当IP故障时只需修改Server端的String对应IP关系来减少发布次数提升我们效率。
 
+以下你将会了解到
+1. 安装文档
+2. sdk功能介绍
+3. server端API介绍
+
 # 安装文档
  http://blog.puppeter.com/read.php?7
 
