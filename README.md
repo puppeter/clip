@@ -27,7 +27,7 @@ Commands:
   help (?)  give detailed help on a specific sub-command
   </pre>
 
-每个子命令会有相应的帮助信息
+每个子命令会有相应的帮助信息，譬如clip cstring 
 <pre>
 clip cstring 
 Usage: clip cstring [OPTIONS] param...
