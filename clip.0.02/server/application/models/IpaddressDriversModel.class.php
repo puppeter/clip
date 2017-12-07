@@ -1,7 +1,4 @@
 <?php
-/** L5 INTERFACE FOR STRING
- *  @author paulzphuang
- */
 
 class IpaddressDriversModel extends Model
 {
