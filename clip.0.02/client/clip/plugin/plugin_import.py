@@ -25,6 +25,7 @@ class plugin_import(plugin_base):
         
     def clip_list(self):  
         print """ 
+key=>values
 +-----+---------+---------+-------+------+-----+--------------+----------+
 | idc | product | modules | group | ext  | s_k | s_v          | operator |
 +-----+---------+---------+-------+------+-----+--------------+----------+
@@ -42,6 +43,20 @@ class plugin_import(plugin_base):
 | sh  | qq      | qzone   | web   | 0    | ip  | 192.168.0.12 | wds      |
 | sh  | qq      | qzone   | web   | 0    | ip  | 192.168.0.13 | wds      |
 +-----+---------+---------+-------+------+-----+--------------+----------+
+
+values=>key
++-----+---------+-----------------+------------+------+----------------+------+---------------------+
+| idc | product | modules         | group      | ext  | ipaddress      | flag | timestamp           |
++-----+---------+-----------------+------------+------+----------------+------+---------------------+
+| bj  | qq      | qzone           | web        | 0    | 192.168.0.1    |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | cgi             | production | 0    | 10.237.128.185 |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | cgi             | production | 0    | 10.237.132.148 |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | api             | production | 0    | 10.247.78.101  |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | api             | production | 0    | 10.247.76.106  |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | cloudgateway    | production | 0    | 10.247.32.126  |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | cloudgateway    | production | 0    | 10.247.86.140  |    1 | 2017-10-19 15:16:54 |
+| sh  | csg     | cloudgateway    | production | 0    | 10.247.78.105  |    1 | 2017-10-19 15:16:54 |
++-----+---------+---------+-------+---------------------------------+-----+--------------+----------+
 """
 
     def build_template(self,filename):
@@ -76,6 +91,8 @@ example|bj|qq|qzone|web|0|ip|192.168.0.1|wds\n
                         print map_array['data']
                     else: 
                         print map_array['data']
+                else:
+                    print "format error"
             else:
                 break
         file_object.close()

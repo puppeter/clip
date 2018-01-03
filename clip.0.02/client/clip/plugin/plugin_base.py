@@ -115,6 +115,9 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
+            if len(filename.split("@")[1].split("-")) != 4:
+                print "cstring format error,for example: *-qq-*-*" 
+                sys.exit(1) 
             
         if command == "scp":
             if (options['p'] == None): 
@@ -130,31 +133,34 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
+            if len(args[1].split("@")[1].split("-")) != 4:
+                print "cstring format error,for example: *-qq-*-*" 
+                sys.exit(1) 
         
+
         if command == "cstring":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-        
-        if command == "property":
-            if (options['q'] == None) : 
-                self.print_help()
+            if len(options['q'].split("-")) != 4:
+                print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
+        
         
         if command == "scan":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-        
-        if command == "assh":
-            if (options['q'] == None) and (options['i'] == None): 
-                self.print_help()
+            if len(options['q'].split("-")) != 4:
+                print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
 
+        
         if command == "tree":
             if (options['q'] == None): 
                 self.print_help()
                 sys.exit(1) 
+
         if command == "import":
             if (options['i'] == None): 
                 self.print_help()

@@ -12,7 +12,6 @@ class plugin_history(plugin_base):
         plugin_base.__init__(self)
 
     def process(self, options, args):   
-        self.checkparam("getpass",options,args)
         ret=self.get_history().split("|")[:-1] 
         i=1
         for log in ret:
