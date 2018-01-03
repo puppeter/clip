@@ -116,9 +116,11 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            if len(filename.split("@")[1].split("-")) not in allow_count:
-                print "cstring format error,for example: *-qq-*-*" 
-                sys.exit(1) 
+            match=re.search(r'-',filename)
+            if match != None:
+                if len(filename.split("@")[1].split("-")) not in allow_count:
+                    print "cstring format error,for example: *-qq-*-*" 
+                    sys.exit(1) 
             
         if command == "scp":
             if (options['p'] == None): 
@@ -134,9 +136,11 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            if len(args[1].split("@")[1].split("-")) not in allow_count :
-                print "cstring format error,for example: *-qq-*-*" 
-                sys.exit(1) 
+            match=re.search(r'-',args[1])
+            if match != None:
+                if len(args[1].split("@")[1].split("-")) not in allow_count :
+                    print "cstring format error,for example: *-qq-*-*" 
+                    sys.exit(1) 
         
 
         if command == "cstring":
@@ -144,18 +148,20 @@ class plugin_base:
                 self.print_help()
                 sys.exit(1) 
             allow_num=[4,5]
-            if len(options['q'].split("-")) not in allow_count:
-                print "cstring format error,for example: *-qq-*-*" 
-                sys.exit(1) 
+            if options['q'] != None:
+                if len(options['q'].split("-")) not in allow_count:
+                    print "cstring format error,for example: *-qq-*-*" 
+                    sys.exit(1) 
         
         
         if command == "scan":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            if len(options['q'].split("-")) not in allow_count:
-                print "cstring format error,for example: *-qq-*-*" 
-                sys.exit(1) 
+            if options['q'] != None:
+                if len(options['q'].split("-")) not in allow_count:
+                    print "cstring format error,for example: *-qq-*-*" 
+                    sys.exit(1) 
 
         
         if command == "tree":
