@@ -88,6 +88,7 @@ class plugin_base:
             sys.exit(1) 
     
     def checkparam(self,command, options, args):
+        allow_count=[4,5]
         import re
         if command == "lt":
             if (options['p'] == None): 
@@ -115,7 +116,7 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            if len(filename.split("@")[1].split("-")) != 4:
+            if len(filename.split("@")[1].split("-")) not in allow_count:
                 print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
             
@@ -133,7 +134,7 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            if len(args[1].split("@")[1].split("-")) != 4:
+            if len(args[1].split("@")[1].split("-")) not in allow_count :
                 print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
         
@@ -142,7 +143,8 @@ class plugin_base:
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            if len(options['q'].split("-")) != 4:
+            allow_num=[4,5]
+            if len(options['q'].split("-")) not in allow_count:
                 print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
         
@@ -151,7 +153,7 @@ class plugin_base:
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            if len(options['q'].split("-")) != 4:
+            if len(options['q'].split("-")) not in allow_count:
                 print "cstring format error,for example: *-qq-*-*" 
                 sys.exit(1) 
 
