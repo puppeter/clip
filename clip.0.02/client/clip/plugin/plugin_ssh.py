@@ -77,7 +77,9 @@ class plugin_ssh(plugin_base):
             if options['j'] == True:
                 import json
                 outputs={}
-                outputs['retcode']=0
+                print output
+                sys.exit()
+                outputs['retcode']=output
                 outputs['data']=output
                 print json.dumps(outputs)
 

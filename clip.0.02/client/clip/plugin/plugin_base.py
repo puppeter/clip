@@ -330,8 +330,12 @@ class plugin_base:
         if options['j'] != True:
             os.system(cmd)
         else:
-            output=os.popen(cmd).readlines()
-            return output 
+            import commands
+            status, output = commands.getstatusoutput(cmd)  
+            outputs={}
+            outputs['retcode']=status
+            outputs['data']=output
+            return outputs 
 
 
     def scp_cmd(self, filename, password, username, host, path,port,options):
