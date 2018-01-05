@@ -161,6 +161,11 @@ data   返回内容
 
 curl 用例
 curl "IPindex.php/Clip/clip_updateFlag?ip=192.168.1.1&flag=2&signature=06588845bdad76e1a143831e9a970661"
+</pre>
+
+
+## 5.接口功能：修改flag状态(index.php/Clip/clip_register)
+<pre>
 
 
 </pre>
