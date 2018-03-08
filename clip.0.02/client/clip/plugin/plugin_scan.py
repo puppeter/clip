@@ -70,7 +70,7 @@ class plugin_scan(plugin_base):
             print "unknow error"
             sys.exit(1)
 
-    def scan(self,ip,port,timeout=3):
+    def scan(self,ip,port,options,timeout=3):
         fd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         fd.settimeout(timeout)
         try:
