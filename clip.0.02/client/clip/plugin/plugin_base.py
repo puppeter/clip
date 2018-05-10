@@ -254,6 +254,11 @@ class plugin_base:
         url = self.ip+"/index.php/Clip/clip_register?"+parameter+"&operator="+self.operator+"&signature="+str(signature.hexdigest())+"" 
         return url 
     
+    def build_clip_delete(self,parameter):
+        signature = self.build_signature(parameter) 
+        url = self.ip+"/index.php/Clip/clip_delete?"+parameter 
+        return url 
+    
     def history_upload(self,log_command):
         arr={"log":log_command}
         signature = self.build_signature("signature") 

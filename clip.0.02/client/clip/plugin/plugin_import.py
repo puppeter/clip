@@ -19,6 +19,8 @@ class plugin_import(plugin_base):
             self.build_template("clip_template")
         elif options['i'] != None:
             self.clip_insert(options)
+        elif options['d'] != None:
+            self.clip_delete(options)
         else:
            self.print_help()
            sys.exit(1)
@@ -85,6 +87,37 @@ example|bj|qq|qzone|web|0|ip|192.168.0.1|wds\n
                 if line_arr[0] != 'example' and len(line_arr) == 8:
                     parameter="idc="+line_arr[0]+"&product="+line_arr[1]+"&modules="+line_arr[2]+"&group="+line_arr[3]+"&port="+line_arr[4]+'&v='+line_arr[6]+'&owner='+line_arr[7]
                     url=self.build_clip_register(parameter)
+                    json_res=self.curl_get_contents(url,None,self.host)
+                    map_array=json.loads(json_res)
+                    if map_array['ret'] == '0':
+                        print map_array['data']
+                    else: 
+                        print map_array['data']
+                else:
+                    print "format error"
+            else:
+                break
+        file_object.close()
+    
+
+    def clip_delete(self,options):
+
+        if os.path.exists(options['d']) != True:
+            print "filename:"+options['d']+" not exists"
+            sys.exit(1)
+
+        file_object = open(options['d'])
+        while True:
+            line = file_object.readline()
+            if line:
+                pass
+                ip=line.strip() 
+                line_arr=ip.split(".")
+                if len(line_arr) == 4:
+                    url="ip="+ip+"&owner=guest"
+                    signature=self.build_signature(url)
+                    parameter="ip="+ip+"&owner=guest&signature="+str(signature.hexdigest())
+                    url=self.build_clip_delete(parameter)
                     json_res=self.curl_get_contents(url,None,self.host)
                     map_array=json.loads(json_res)
                     if map_array['ret'] == '0':
