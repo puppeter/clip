@@ -23,7 +23,7 @@ class ClipModel extends Model {
 	}
 
 	public function Get_clip_db_relaction($input=array()){
-        if(count($input) == 0) return false;
+        if(count($input) == 0) false;
         $sql = "SELECT * FROM clip where ".$input['sql'];
         $results = $this->execute($sql);
         return $results;
@@ -45,24 +45,6 @@ class ClipModel extends Model {
         return $results;
     }
     
-    # insert property 
-    public function Get_property($input=array()){
-        if(count($input) == 0) return false;
-
-        foreach($input as $key => $values){
-            if($key == "idc" && $values != "*" ) $tmp[]=$key."='".$values."'"; 
-            if($key == "product" && $values != "*" ) $tmp[]=$key."='".$values."'"; 
-            if($key == "group" && $values != "*" ) $tmp[]="`".$key."`='".$values."'"; 
-            if($key == "ext" && $values != "" ) $tmp[]=$key."='".$values."'"; 
-            
-        }
-        
-        $parameter=implode(" and ",$tmp);
-        $sql = "select * from hupo_profile where ".$parameter;
-        $results = $this->execute($sql);
-        return $results;
-    }
-
     # insert clip
     public function Insert_clip($input=array()){
         $clip_sql="replace into clip (idc,product,modules,`group`,ext,s_k,s_v,operator)values('"
@@ -86,6 +68,31 @@ class ClipModel extends Model {
         .$input['v']."'"
         .")";
         $results = $this->execute($ip_sql);
+        return true;
+    }
+    
+    # update clip
+    public function Update_clip($input=array()){
+       $tmp['sql']="s_v='".$input['ip']."'";
+
+       $arr=$this->Get_clip_db_relaction($tmp);
+       if(empty($arr)) return false;
+       $clip_sql='update clip set flag='.$input['flag']." where s_v='".$input['ip']."' limit 1";
+       $results = $this->execute($clip_sql);
+       $ip_data_sql='update ip_data set flag='.$input['flag']." where ipaddress='".$input['ip']."' limit 1";
+       $results = $this->execute($ip_data_sql);
+        return true;
+    }
+    
+    # update clip
+    public function Delete_clip($input=array()){
+       $tmp['sql']="s_v='".$input['ip']."'";
+       $arr=$this->Get_clip_db_relaction($tmp);
+       if(empty($arr)) return false;
+       $clip_sql='delete from  clip where s_v="'.$input['ip'].'" limit 1';
+       $results = $this->execute($clip_sql);
+       $ip_data_sql='delete from  ip_data where ipaddress="'.$input['ip'].'" limit 1';
+       $results = $this->execute($ip_data_sql);
         return true;
     }
 }
