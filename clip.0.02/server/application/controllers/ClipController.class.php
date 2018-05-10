@@ -77,7 +77,6 @@ public function api_get_treeAction(){
     if($input['operator'] == "guest"){
         $key=self::Guest_Key;
     }elseif($input['operator'] == "admin"){
-        $key=self::Admin_Key;
     }else{
         $key=self::Default_Key;
     }
@@ -397,30 +396,23 @@ public function clip_registerAction() {
     }
 }
 
-public function clip_deleterAction() {
+public function clip_deleteAction() {
     $input=array();
-    $input['idc'] =$this->get('idc');
-    $input['product'] =$this->get('product');
-    $input['modules'] =$this->get('modules');
-    $input['group'] =$this->get('group');
-    $input['port'] =$this->get('port');
-    $input['k'] =$this->get('k');
-    $input['v'] =$this->get('v');
+    $input['ip'] =$this->get('ip');
     $input['owner'] =$this->get('owner');
-    $input['operator'] =$this->get('operator');
     $input['signature'] =$this->get('signature');
     
-    if($input['operator'] == "guest"){
+    if($input['owner'] == "guest"){
         $key=self::Guest_Key;
-    }elseif($input['operator'] == "admin"){
+    }elseif($input['owner'] == "admin"){
         $key=self::Admin_Key;
     }else{
         $key=self::Default_Key;
     }
 	
 
-    $url="idc=".$input['idc']."&product=".$input['product']."&modules=".$input['modules']."&group=".$input['group']
-    ."&port=".$input['port']."&v=".$input['v']."&owner=".$input['owner'];
+    $url="ip=".$input['ip']."&owner=".$input['owner'];
+
 	$signature=md5($url."-".$key."-".date('H'));
 	if(empty($input['signature'])|| $input['signature'] != $signature){
 	    Log::write("line:".__LINE__."| res:premission deny| operator:".$input['operator'],error);
@@ -429,13 +421,19 @@ public function clip_deleterAction() {
 	    die(json_encode($output));
 	}
 
+
+    $allow_user=array('guest','admin');
+	if(!in_array($input['owner'],$allow_user)){
+	    Log::write("line:".__LINE__."| res:premission deny| operator:".$input['operator'],error);
+	    $output['ret']="1";
+	    $output['data']="line:".__LINE__."\tres:user permission error";
+	    die(json_encode($output));
+	}
     $model=$this->model('Clip');
-    $res=$model->Insert_clip($input);
+    $res=$model->Delete_clip($input);
     if($res){
         $output['ret']="0";
-        $tmp['cstring']=$input['idc']."-".$input['product']."-".$input['modules']."-".$input['group']."-".$input['port'];
-        $tmp['v']=$input['v'];
-        $tmp['operator']=$input['operator'];
+        $tmp['ip']=$input['ip'];
         $output['data']=implode("|",$tmp)."| succ";
         echo json_encode($output);
     }else{
