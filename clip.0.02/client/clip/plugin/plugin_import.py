@@ -112,8 +112,8 @@ example|bj|qq|qzone|web|0|ip|192.168.0.1|wds\n
             if line:
                 pass
                 ip=line.strip() 
-                line_arr=ip.split(".")
-                if len(line_arr) == 4:
+                
+                if self.check_is_ip(ip):
                     url="ip="+ip+"&owner=guest"
                     signature=self.build_signature(url)
                     parameter="ip="+ip+"&owner=guest&signature="+str(signature.hexdigest())

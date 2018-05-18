@@ -373,3 +373,14 @@ class plugin_base:
             print cmd
             sys.exit(0)
         os.system(cmd)
+    
+    def check_is_ip(self,ip):
+        import re
+        re_ip = re.compile('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$')
+        if re_ip.match(ip):
+            return True
+        else:
+            return False
+
+
+
