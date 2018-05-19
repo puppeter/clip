@@ -59,6 +59,9 @@ class plugin_scp(plugin_base):
                 else:
                     for ip in ip_arr:
                         self.scp_cmd(filename,password,username,ip,path,port,options)
+                        if (options['s'] != None) and options['s'].isdigit():
+                            import time
+                            time.sleep(int(options['s']))
 
             else:
                 self.scp_cmd(filename,password,username,options['q'],path,port,options)

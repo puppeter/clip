@@ -64,6 +64,9 @@ class plugin_ssh(plugin_base):
                             output.append(self.ssh_cmd(ip,password,command,user,port,options))
                         else:
                             self.ssh_cmd(ip,password,command,user,port,options)
+                            if (options['s'] != None) and options['s'].isdigit():
+                                import time
+                                time.sleep(int(options['s']))
 
             else: 
                 ip=tmp_array[1]
@@ -76,12 +79,7 @@ class plugin_ssh(plugin_base):
 
             if options['j'] == True:
                 import json
-                outputs={}
-                print output
-                sys.exit()
-                outputs['retcode']=output
-                outputs['data']=output
-                print json.dumps(outputs)
+                print json.dumps(output)
 
             # disalbe ssh log
             if options['o'] == True:
@@ -93,4 +91,3 @@ class plugin_ssh(plugin_base):
         except Exception:
             print "unknow error"
             sys.exit(1)
-
