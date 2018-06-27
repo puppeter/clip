@@ -333,7 +333,10 @@ class plugin_base:
             sys.exit(0)
     
         if options['j'] != True:
-            os.system(cmd)
+            if options['t'] == None:
+                print self.commandExec(cmd,10)
+            else:
+                print self.commandExec(cmd,int(options['t']))
         else:
             import commands
             status, output = commands.getstatusoutput(cmd)  
@@ -372,7 +375,12 @@ class plugin_base:
         if options['d'] == True:
             print cmd
             sys.exit(0)
-        os.system(cmd)
+
+        if options['t'] == None:
+            print self.commandExec(cmd,10)
+        else:
+            print self.commandExec(cmd,int(options['t']))
+
     
     def check_is_ip(self,ip):
         import re
@@ -384,3 +392,25 @@ class plugin_base:
 
 
 
+    def commandExec(self,cmd, timeout=5):  
+        import platform  
+        import subprocess  
+        import signal  
+        import time
+        is_linux = platform.system() == 'Linux'  
+          
+        p = subprocess.Popen(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, shell=True, preexec_fn=os.setsid if is_linux else None)  
+        t_beginning = time.time()  
+        seconds_passed = 0  
+        while True:  
+            if p.poll() is not None:  
+                break  
+            seconds_passed = time.time() - t_beginning  
+            if timeout and seconds_passed > timeout:  
+                if is_linux:  
+                    os.killpg(p.pid, signal.SIGTERM)  
+                    print "timeout"
+                else:  
+                    p.terminate()  
+            time.sleep(0.1)  
+        return p.stdout.read()  
