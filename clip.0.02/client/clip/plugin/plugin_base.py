@@ -334,7 +334,7 @@ class plugin_base:
     
         if options['j'] != True:
             if options['t'] == None:
-                print self.commandExec(cmd,10)
+                print self.commandExec(cmd)
             else:
                 print self.commandExec(cmd,int(options['t']))
         else:
@@ -377,7 +377,7 @@ class plugin_base:
             sys.exit(0)
 
         if options['t'] == None:
-            print self.commandExec(cmd,10)
+            print self.commandExec(cmd)
         else:
             print self.commandExec(cmd,int(options['t']))
 
