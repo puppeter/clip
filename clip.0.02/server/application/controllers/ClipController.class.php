@@ -95,59 +95,11 @@ public function api_get_treeAction(){
 
 }
 
-public function get_propertyAction(){
-
-    # input
-    $input=array();
-    $input['cstring'] =$this->get('cstring');
-    $input['operator'] =$this->get('operator');
-    $input['signature'] =$this->get('signature');
-
-    if($input['operator'] == "guest"){
-        $key=self::Guest_Key;
-    }elseif($input['operator'] == "admin"){
-        $key=self::Admin_Key;
-    }else{
-        $key=self::Default_Key;
-    }
-
-    $signature=md5($input['cstring']."-".$key."-".date('H'));
-    
-    if(empty($input['signature'])|| $input['signature'] != $signature){
-        Log::write("line:".__LINE__."| res:premission deny| operator:".$input['operator'],error);
-        $output['ret']="1";
-        $output['data']="line:".__LINE__."\tres:permission error";
-        die(json_encode($output));
-    }
-
-    $arr=explode("-",$input['cstring']);
-    $input['idc']=$arr['0'];
-    $input['product']=$arr['1'];
-    $input['modules']=$arr['2'];
-    $input['group']=$arr['3'];
-    $input['ext']=$arr['4'];
-
-    $model=$this->model('Clip');
-    $result=$model->Get_property($input);
-    $tmp['cstring']=$result['0']['cstring'];
-    $tmp['docker_id']=$result['0']['docker_id'];
-    $tmp['docker_version']=$result['0']['docker_version'];
-    $tmp['app_port']=$result['0']['app_port'];
-    $tmp['admin_port']=$result['0']['admin_port'];
-    $tmp['count_container']=$result['0']['mcount'];
-
-    $output['ret']="0";
-    $output['data']=$tmp;
-    echo json_encode($output);
-
-}
 
 private function getcstring_tree($input=array()) {
 
     $arr=explode("-",$input['cstring']);
-
     if($arr['0'] != "*") $data[]="idc='".$arr['0']."'";
-
     if(empty($arr['1']) ) {
         die("error");
     }else{
@@ -185,12 +137,21 @@ public function api_version1Action() {
     $input['operator'] =$this->get('operator');
     $input['format'] =$this->get('format');
     $input['signature'] =$this->get('signature');
-
-    
-    $parameter_allow_array=array("getip","getcstring","mgetip","mgetcstring");	
+    $input['flag'] =$this->get('flag');
 
     $output['ret']="0"; # 0 succ
 
+    if(empty($input['flag'])) $input['flag']=1;
+    $allow_flag_array=array('1','2','8');
+    if(!in_array($input['flag'],$allow_flag_array)){
+        Log::write("line:".__LINE__." | res:parameter error | operator:".$input['operator'],error);
+        $output['ret']="1";
+        $output['data']="line:".__LINE__."\tres:flag not found";
+        die(json_encode($output));
+    }
+
+
+    $parameter_allow_array=array("getip","getcstring","mgetip","mgetcstring");	
     if(!in_array($input['parameter'],$parameter_allow_array)){
         Log::write("line:".__LINE__." | res:parameter error | operator:".$input['operator'],error);
         $output['ret']="1";
@@ -265,11 +226,12 @@ public function api_version1Action() {
         die(json_encode($output));
     }
 
+    # input 
     switch($input['parameter']){
         case 'getcstring':
             $r=$this->model('IpaddressDrivers');
             $sql=$this->getcstring(array('cstring'=>$input['cstring']));
-            $output['data']=$r->get_ip(array('sql'=>$sql));
+            $output['data']=$r->get_ip(array('sql'=>$sql,'flag'=>$input['flag']));
             break;
         case 'mgetcstring':
             $r=$this->model('IpaddressDrivers');
@@ -282,7 +244,6 @@ public function api_version1Action() {
                 }
             }
             break;
-
         case 'getip':
             $output['data']=$this->getip($input['ip']);
             break;
@@ -291,6 +252,7 @@ public function api_version1Action() {
             break;
     }
     
+    # output 
     switch($input['format']){
         case 'json':
             echo json_encode($output['data']);
