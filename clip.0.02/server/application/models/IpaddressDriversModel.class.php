@@ -1,4 +1,7 @@
 <?php
+/** L5 INTERFACE FOR STRING
+ *  @author paulzphuang
+ */
 
 class IpaddressDriversModel extends Model
 {
@@ -8,7 +11,7 @@ class IpaddressDriversModel extends Model
 	
 	public function get_ip($input=array()){
 		if(count($input) == 0) return false;
-		$sql = "SELECT * FROM ip_data where ".$input['sql'];
+		$sql = "SELECT * FROM ip_data where ".$input['sql']." and flag=".$input['flag'];
 		$results = $this->execute($sql);
 		return $this->format($results);
 	}

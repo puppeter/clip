@@ -24,7 +24,7 @@ class ClipModel extends Model {
 
 	public function Get_clip_db_relaction($input=array()){
         if(count($input) == 0) false;
-        $sql = "SELECT * FROM clip where ".$input['sql'];
+        $sql = "SELECT * FROM clip where ".$input['sql']." where flag=1";
         $results = $this->execute($sql);
         return $results;
     }
@@ -84,7 +84,7 @@ class ClipModel extends Model {
         return true;
     }
     
-    # update clip
+    # delete clip
     public function Delete_clip($input=array()){
        $tmp['sql']="s_v='".$input['ip']."'";
        $arr=$this->Get_clip_db_relaction($tmp);
