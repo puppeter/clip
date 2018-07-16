@@ -24,7 +24,7 @@ class ClipModel extends Model {
 
 	public function Get_clip_db_relaction($input=array()){
         if(count($input) == 0) false;
-        $sql = "SELECT * FROM clip where ".$input['sql']." where flag=1";
+        $sql = "SELECT * FROM clip where ".$input['sql'];
         $results = $this->execute($sql);
         return $results;
     }
