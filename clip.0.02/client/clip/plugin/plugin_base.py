@@ -88,7 +88,7 @@ class plugin_base:
             sys.exit(1) 
     
     def checkparam(self,command, options, args):
-        allow_count=[4,5]
+
         import re
         if command == "lt":
             if (options['p'] == None): 
@@ -116,11 +116,14 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            match=re.search(r'-',filename)
-            if match != None:
-                if len(filename.split("@")[1].split("-")) not in allow_count:
-                    print "cstring format error,for example: *-qq-*-*" 
-                    sys.exit(1) 
+            
+            match=re.search(r',',filename)
+            if match !=None:    
+                optionsArray=filename.split("@")[1].split(",")
+                for cstring in optionsArray:
+                    self.match_cstring(cstring)
+            else:
+                self.match_cstring(filename.split("@")[1])
             
         if command == "scp":
             if (options['p'] == None): 
@@ -136,38 +139,46 @@ class plugin_base:
             if match == None:
                 self.print_help()
                 sys.exit(1) 
-            match=re.search(r'-',args[1])
-            if match != None:
-                if len(args[1].split("@")[1].split("-")) not in allow_count :
-                    print "cstring format error,for example: *-qq-*-*" 
-                    sys.exit(1) 
-        
 
+            match=re.search(r',',args[1])
+            if match !=None:    
+                optionsArray=args[1].split(",")
+                for cstring in optionsArray:
+                    self.match_cstring(cstring)
+            else:
+                self.match_cstring(args[1])
+
+
+        
         if command == "cstring":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            allow_num=[4,5]
-            if options['q'] != None:
-                if len(options['q'].split("-")) not in allow_count:
-                    print "cstring format error,for example: *-qq-*-*" 
-                    sys.exit(1) 
+
+            
+            match=re.search(r',',options['q'])
+            if match != None:
+                optionsArray=options['q'].split(',')
+                for cstring in optionsArray:
+                    self.match_cstring(cstring)
+            else:
+                self.match_cstring(options)
         
         
         if command == "scan":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            if options['q'] != None:
-                if len(options['q'].split("-")) not in allow_count:
-                    print "cstring format error,for example: *-qq-*-*" 
-                    sys.exit(1) 
+
+            self.match_cstring(options)
 
         
         if command == "tree":
             if (options['q'] == None): 
                 self.print_help()
                 sys.exit(1) 
+            
+            self.match_cstring(options)
 
         if command == "import":
             if (options['i'] == None): 
@@ -175,6 +186,18 @@ class plugin_base:
                 sys.exit(1) 
 
         return True 
+
+    def match_cstring(self,options):
+        allow_count=[4,5]
+        if isinstance(options,dict):
+            if len(options['q'].split("-")) not in allow_count:
+                print "cstring format error,for example: *-qq-*-*" 
+                sys.exit(1) 
+        else:
+            if len(options.split("-")) not in allow_count:
+                print "cstring format error,for example: *-qq-*-*" 
+                sys.exit(1) 
+            
 
     def append_data(self,options,data,plugin_base):
         if (options['q'] != None):
