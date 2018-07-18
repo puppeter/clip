@@ -238,7 +238,7 @@ public function api_version1Action() {
             $arr=explode(',',$input['cstring']);
             foreach($arr as $k){
                 $sql=$this->getcstring(array('cstring'=>$k));
-                $tmp=$r->get_ip(array('sql'=>$sql));
+                $tmp=$r->get_ip(array('sql'=>$sql,'flag'=>$input['flag']));
                 foreach($tmp as $ip){
                     $output['data'][]=$ip;
                 }
