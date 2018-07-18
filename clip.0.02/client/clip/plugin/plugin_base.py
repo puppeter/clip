@@ -334,9 +334,9 @@ class plugin_base:
     
         if options['j'] != True:
             if options['t'] == None:
-                print self.commandExec(cmd)
+                print self.commandExec(cmd,5,"ssh",host)
             else:
-                print self.commandExec(cmd,int(options['t']))
+                print self.commandExec(cmd,int(options['t']),"ssh",host)
         else:
             import commands
             status, output = commands.getstatusoutput(cmd)  
@@ -377,9 +377,9 @@ class plugin_base:
             sys.exit(0)
 
         if options['t'] == None:
-            print self.commandExec(cmd)
+            print self.commandExec(cmd,5,"scp",host)
         else:
-            print self.commandExec(cmd,int(options['t']))
+            print self.commandExec(cmd,int(options['t']),"scp",host)
 
     
     def check_is_ip(self,ip):
@@ -392,7 +392,9 @@ class plugin_base:
 
 
 
-    def commandExec(self,cmd, timeout=5):  
+    def commandExec(self,cmd, timeout=5,pluginFrom="none",fromIp="none"):  
+
+        
         import platform  
         import subprocess  
         import signal  
@@ -409,8 +411,38 @@ class plugin_base:
             if timeout and seconds_passed > timeout:  
                 if is_linux:  
                     os.killpg(p.pid, signal.SIGTERM)  
+                    self.wlog("timeout ip:"+fromIp,pluginFrom,"default","error.log")
                     print "timeout"
                 else:  
                     p.terminate()  
             time.sleep(0.1)  
         return p.stdout.read()  
+
+
+    def wlog(self,content,tag="default",level="default",logname="access.log"):
+
+        import logging  
+        # 创建一个logger  
+        logger = logging.getLogger(tag)  
+        logger.setLevel(logging.DEBUG)  
+        ymd=time.strftime("%Y%m%d", time.localtime())  
+        path="/var/log/clip/"+ymd
+        if os.path.exists(path) != True:
+            print os.makedirs(path) 
+
+        # 创建一个handler，用于写入日志文件  
+        fh = logging.FileHandler(path+"/"+logname)  
+        fh.setLevel(logging.INFO)  
+
+        # 再创建一个handler，用于输出到控制台  
+
+        # 定义handler的输出格式  
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')  
+        fh.setFormatter(formatter)  
+
+        # 给logger添加handler  
+        logger.addHandler(fh)  
+
+        # 记录一条日志  
+        logger.info(content) 
+

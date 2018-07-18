@@ -77,6 +77,7 @@ class plugin_scan(plugin_base):
             fd.connect((ip,port))
             print('\033[0;36;40m\033[0;32;40m Server %s port %s OK!\033' % (ip,port))
         except Exception:
+            self.wlog("not connected ip:"+ip,"scan","default","error.log")
             print('\033[0;36;40m\031[0;32;40m Server  %s port %s is not connected!\033' % (ip,port))
         fd.close()
     
@@ -94,6 +95,7 @@ class plugin_scan(plugin_base):
             
             except Exception:
                 if options['j'] !=True:
+                    self.wlog("not connected ip:"+ip,"scan","default","error.log")
                     print('\033[0;36;40m\031[0;32;40m Server  %s port %s is not connected!\033' % (ip,port))
                 tmp[ip]=1
                 
