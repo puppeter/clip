@@ -103,7 +103,6 @@ class plugin_base:
                 self.print_help()
                 sys.exit(1) 
                 
-                
         if command == "ssh":
             if (options['p'] == None): 
                 self.print_help()
@@ -148,13 +147,10 @@ class plugin_base:
             else:
                 self.match_cstring(args[1])
 
-
-        
         if command == "cstring":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-
             
             match=re.search(r',',options['q'])
             if match != None:
@@ -164,15 +160,19 @@ class plugin_base:
             else:
                 self.match_cstring(options)
         
-        
         if command == "scan":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
 
-            self.match_cstring(options)
-
-        
+            match=re.search(r',',options['q'])
+            if match != None:
+                optionsArray=options['q'].split(',')
+                for cstring in optionsArray:
+                    self.match_cstring(cstring)
+            else:
+                self.match_cstring(options)
+            
         if command == "tree":
             if (options['q'] == None): 
                 self.print_help()
