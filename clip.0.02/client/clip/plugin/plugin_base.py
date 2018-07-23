@@ -116,13 +116,14 @@ class plugin_base:
                 self.print_help()
                 sys.exit(1) 
             
-            match=re.search(r',',filename)
-            if match !=None:    
-                optionsArray=filename.split("@")[1].split(",")
-                for cstring in optionsArray:
-                    self.match_cstring(cstring)
-            else:
-                self.match_cstring(filename.split("@")[1])
+            if self.check_is_ip(filename.split("@")[1]) == False:
+                match=re.search(r',',filename)
+                if match !=None:    
+                    optionsArray=filename.split("@")[1].split(",")
+                    for cstring in optionsArray:
+                        self.match_cstring(cstring)
+                else:
+                    self.match_cstring(filename.split("@")[1])
             
         if command == "scp":
             if (options['p'] == None): 
@@ -139,39 +140,42 @@ class plugin_base:
                 self.print_help()
                 sys.exit(1) 
 
-            match=re.search(r',',args[1])
-            if match !=None:    
-                optionsArray=args[1].split(",")
-                for cstring in optionsArray:
-                    self.match_cstring(cstring)
-            else:
-                self.match_cstring(args[1])
+            if self.check_is_ip(args[1].split('@')[1].split(':')[0]) == False:
+                match=re.search(r',',args[1])
+                if match !=None:    
+                    optionsArray=args[1].split(",")
+                    for cstring in optionsArray:
+                        self.match_cstring(cstring)
+                else:
+                    self.match_cstring(args[1])
 
         if command == "cstring":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
-            
-            match=re.search(r',',options['q'])
-            if match != None:
-                optionsArray=options['q'].split(',')
-                for cstring in optionsArray:
-                    self.match_cstring(cstring)
-            else:
-                self.match_cstring(options)
+
+            if options['i'] == None:
+                match=re.search(r',',options['q'])
+                if match != None:
+                    optionsArray=options['q'].split(',')
+                    for cstring in optionsArray:
+                        self.match_cstring(cstring)
+                else:
+                    self.match_cstring(options)
         
         if command == "scan":
             if (options['q'] == None) and (options['i'] == None): 
                 self.print_help()
                 sys.exit(1) 
 
-            match=re.search(r',',options['q'])
-            if match != None:
-                optionsArray=options['q'].split(',')
-                for cstring in optionsArray:
-                    self.match_cstring(cstring)
-            else:
-                self.match_cstring(options)
+            if options['q'] != None:
+                match=re.search(r',',options['q'])
+                if match != None:
+                    optionsArray=options['q'].split(',')
+                    for cstring in optionsArray:
+                        self.match_cstring(cstring)
+                else:
+                    self.match_cstring(options)
             
         if command == "tree":
             if (options['q'] == None): 
